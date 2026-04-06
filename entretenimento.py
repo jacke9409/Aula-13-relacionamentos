@@ -22,7 +22,7 @@ class Serie(Base):
     nome = Column(String(100), nullable=False, unique=True)
     genero = Column(String(100), nullable=False)
     temporadas = Column(Integer, nullable=False)
-    episodios = Column(Float, nullable=False)
+    quantidade_episodios = Column(Integer, nullable=False)
 
     #Relacionamento com a classe filha
     episodios = relationship('Episodio', back_populates='serie')
@@ -50,4 +50,34 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-# Criar uma série
+#Criação do Banco e Inserção de Dados
+#Criar o banco (SQLite recomendado)
+#Criar as tabelas
+#Criar uma função para inserir dados da tabela PAI
+#Criar uma função para inserir dados da tabela FILHA
+#Pelo menos 4 registros na tabela pai
+#Pelo menos 10 registros na tabela filha
+# Todos os filhos devem ter um pai_id válido
+# genero tam
+def inserir_serie():
+    with Session() as session:
+        try:
+            nova_serie = input("Digite o nome da série: ").capitalize()
+            novo_genero = input("Digite o gênero da série: ").capitalize()
+            novas_temporadas = int(input("Digite o número de temporadas: "))
+            novos_episodios = float(input("Digite o número de episódios: "))
+
+            serie = Serie(
+                nome=nova_serie, 
+                genero=novo_genero, 
+                temporadas=novas_temporadas, 
+                quantidade_episodios=novos_episodios
+            )
+            
+            session.add(serie)
+            session.commit()
+            print("Série inserida com sucesso!")
+        except Exception as e:
+            print(f"Erro ao inserir série: {e}")
+            session.rollback()
+inserir_serie()
