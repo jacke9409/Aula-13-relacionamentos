@@ -103,5 +103,41 @@ def inserir_episodio():
         except Exception as erro:
             print(f"Erro ao inserir episódio: {erro}")
             session.rollback()
-inserir_episodio()
+# inserir_episodio()
 
+# Criar funções para consultas:
+# 1. Listar todos os filhos com dados do pai
+# 2. Filtrar filhos de um pai específico
+# 3. Listar apenas pais que possuem filhos
+
+def listar_ep_com_series():
+    with Session() as session:
+        try:
+            episodios = session.query(Episodio).all()
+            for ep in episodios:
+                print(f"Episódio: {ep.nome}, Série: {ep.serie.nome}")
+        except Exception as erro:
+            print(f"Erro ao listar episódios com séries: {erro}")
+# listar_ep_com_series()
+
+def filtrar_ep_por_serie():
+    with Session() as session:
+        try:
+            serie_id = int(input("Digite o ID da série para filtrar os episódios: "))
+            episodios = session.query(Episodio).filter(Episodio.serie_id == serie_id).all()
+            for ep in episodios:
+                print(f"Episódio: {ep.nome}, Série: {ep.serie.nome}")
+        except Exception as erro:
+            print(f"Erro ao filtrar episódios por série: {erro}")
+# filtrar_ep_por_serie()
+
+def listar_series_com_episodios():
+    with Session() as session:
+        try:
+            series = session.query(Serie).join(Episodio).all()
+            for serie in series:
+                print(f"Série: {serie.nome}, Gênero: {serie.genero}, Temporadas: {serie.temporadas}, Quantidade de Episódios: {serie.quantidade_episodios}")
+        except Exception as erro:
+            print(f"Erro ao listar séries com episódios: {erro}")
+
+# listar_series_com_episodios()
