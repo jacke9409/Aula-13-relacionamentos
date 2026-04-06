@@ -25,7 +25,7 @@ class Serie(Base):
     quantidade_episodios = Column(Integer, nullable=False)
 
     #Relacionamento com a classe filha
-    episodios = relationship('Episodio', back_populates='serie')
+    episodios = relationship('Episodio', back_populates='serie', cascade="all, delete-orphan")
 
 #Criar a classe filha
 class Episodio(Base):
@@ -194,3 +194,44 @@ def atualizar_episodio():
             print(f"Erro ao atualizar episódio: {erro}")
             session.rollback()
 # atualizar_episodio()
+
+# Remoção de Dados (DELETE)
+# Criar funções para deletar registros:
+# 1. Deletar um filho
+# 2. Deletar um pai
+# 3. Tratar relacionamento (ex: evitar erro ao deletar pai
+# com filhos)
+
+def deletar_episodio():
+    with Session() as session:
+        try:
+            episodio_id = int(input("Digite o ID do episódio que deseja deletar: "))
+            episodio = session.query(Episodio).filter(Episodio.id == episodio_id).first()
+            if episodio:
+                session.delete(episodio)
+                session.commit()
+                print("Episódio deletado com sucesso!")
+            else:
+                print("Episódio não encontrado.")
+        except Exception as erro:
+            print(f"Erro ao deletar episódio: {erro}")
+            session.rollback()
+# deletar_episodio()
+
+# Deletar um pai mesmo que possua filhos associados, utilizando cascade
+def deletar_serie():
+    with Session() as session:
+        try:
+            serie_id = int(input("Digite o ID da série que deseja deletar: "))
+            serie = session.query(Serie).filter(Serie.id == serie_id).first()
+            if serie:
+                serie.cascade = "all, delete-orphan"
+                session.delete(serie)
+                session.commit()
+                print("Série deletada com sucesso!")
+            else:
+                print("Série não encontrada.")
+        except Exception as erro:
+            print(f"Erro ao deletar série: {erro}")
+            session.rollback()
+deletar_serie()
