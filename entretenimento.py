@@ -141,3 +141,56 @@ def listar_series_com_episodios():
             print(f"Erro ao listar séries com episódios: {erro}")
 
 # listar_series_com_episodios()
+
+# Atualização de Dados (UPDATE)
+# Criar funções para atualizar informações no banco
+# 1. Atualizar dados de um pai
+# 2. Atualizar dados de um filho
+
+def atualizar_serie():
+    with Session() as session:
+        try:
+            serie_id = int(input("Digite o ID da série que deseja atualizar: "))
+            serie = session.query(Serie).filter(Serie.id == serie_id).first()
+            if serie:
+                novo_nome = input("Digite o novo nome da série: ").capitalize()
+                novo_genero = input("Digite o novo gênero da série: ").capitalize()
+                novas_temporadas = int(input("Digite o novo número de temporadas: "))
+                novos_episodios = float(input("Digite o novo número de episódios: "))
+
+                serie.nome = novo_nome
+                serie.genero = novo_genero
+                serie.temporadas = novas_temporadas
+                serie.quantidade_episodios = novos_episodios
+
+                session.commit()
+                print("Série atualizada com sucesso!")
+            else:
+                print("Série não encontrada.")
+        except Exception as erro:
+            print(f"Erro ao atualizar série: {erro}")
+            session.rollback()
+# atualizar_serie()
+
+def atualizar_episodio():
+    with Session() as session:
+        try:
+            episodio_id = int(input("Digite o ID do episódio que deseja atualizar: "))
+            episodio = session.query(Episodio).filter(Episodio.id == episodio_id).first()
+            if episodio:
+                novo_nome = input("Digite o novo nome do episódio: ").capitalize()
+                nova_duracao = float(input("Digite a nova duração do episódio (em minutos): "))
+                nova_data_lancamento = input("Digite a nova data de lançamento do episódio (dd/mm/aaaa): ")
+
+                episodio.nome = novo_nome
+                episodio.duracao = nova_duracao
+                episodio.lancamento = nova_data_lancamento
+
+                session.commit()
+                print("Episódio atualizado com sucesso!")
+            else:
+                print("Episódio não encontrado.")
+        except Exception as erro:
+            print(f"Erro ao atualizar episódio: {erro}")
+            session.rollback()
+# atualizar_episodio()
