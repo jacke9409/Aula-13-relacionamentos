@@ -77,7 +77,31 @@ def inserir_serie():
             session.add(serie)
             session.commit()
             print("Série inserida com sucesso!")
-        except Exception as e:
-            print(f"Erro ao inserir série: {e}")
+        except Exception as erro:
+            print(f"Erro ao inserir série: {erro}")
             session.rollback()
-inserir_serie()
+# inserir_serie()
+
+def inserir_episodio():
+    with Session() as session:
+        try:
+            nome_episodio = input("Digite o nome do episódio: ").capitalize()
+            duracao_episodio = float(input("Digite a duração do episódio (em minutos): "))
+            lancamento_episodio = input("Digite a data de lançamento do episódio (dd/mm/aaaa): ")
+            serie_id = int(input("Digite o ID da série a qual o episódio pertence: "))
+
+            episodio = Episodio(
+                nome=nome_episodio,
+                duracao=duracao_episodio,
+                lancamento=lancamento_episodio,
+                serie_id=serie_id
+            )
+
+            session.add(episodio)
+            session.commit()
+            print("Episódio inserido com sucesso!")
+        except Exception as erro:
+            print(f"Erro ao inserir episódio: {erro}")
+            session.rollback()
+inserir_episodio()
+
