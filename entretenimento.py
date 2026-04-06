@@ -8,6 +8,7 @@
 # • Pelo menos 4 atributos em cada classe
 # Commit:
 # feat: cria models com relacionamento 1:N
+
 from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 # criar a base da classe
